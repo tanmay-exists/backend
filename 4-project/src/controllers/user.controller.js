@@ -4,6 +4,7 @@ import {User} from '../models/user.model.js'
 import {uploadOnCloudinary} from '../utils/cloudinary.js'
 import {ApiResponse} from '../utils/ApiResponse.js'
 import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose'
 
 const generateRefreshAndAccessTokens = async(userId) => {
   try {
@@ -384,7 +385,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(
-      new ApiResponse(2oo, channel[0], "User channel fetched successfully")
+      new ApiResponse(200, channel[0], "User channel fetched successfully")
   )
 })
 
@@ -419,19 +420,17 @@ const getWatchHistory = asyncHandler(async (req, res) => {
                   }
                 }
               ]
-            },
+            } 
+          },
+          {
             // adding one more pipeline to get first value from Array
-            {
-              $addFields: {
-                owner: {
-                  $first: "$owner"
-                }
+            $addFields: {
+              owner: {
+                $first: "$owner"
               }
             }
           }
-          }
         ]
-        
       }
     }
   ])
